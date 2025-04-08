@@ -1,4 +1,4 @@
-// ✅ App.js - Giao diện đăng nhập giống mẫu Pinterest + giữ nguyên tính năng
+// ✅ App.js - Giao diện đăng nhập giống mẫu Pinterest + Giao diện chat giống Zalo
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -121,6 +121,112 @@ export default function App() {
     setNewMessage("");
   };
 
+  const chatStyle = {
+    display: "flex",
+    flexDirection: "column",
+    height: "100vh",
+    fontFamily: "sans-serif"
+  };
+
+  const headerStyle = {
+    padding: "10px 20px",
+    backgroundColor: "#0084ff",
+    color: "white",
+    fontWeight: "bold",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center"
+  };
+
+  const messagesContainer = {
+    flex: 1,
+    padding: 20,
+    overflowY: "auto",
+    backgroundColor: "#e5edf4"
+  };
+
+  const messageBubble = (msg) => ({
+    background: msg.senderId === auth.currentUser.uid ? "#dcf8c6" : "white",
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 10,
+    alignSelf: msg.senderId === auth.currentUser.uid ? "flex-end" : "flex-start",
+    maxWidth: "60%",
+    boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+  });
+
+  const inputBar = {
+    display: "flex",
+    padding: 10,
+    borderTop: "1px solid #ccc",
+    background: "white"
+  };
+
+  const inputBox = {
+    flex: 1,
+    padding: 10,
+    borderRadius: 20,
+    border: "1px solid #ccc",
+    marginRight: 10
+  };
+
+  const sendButton = {
+    background: "#0084ff",
+    color: "white",
+    border: "none",
+    padding: "10px 16px",
+    borderRadius: 20,
+    cursor: "pointer"
+  };
+
+  if (user && roomId) {
+    return (
+      <div style={chatStyle}>
+        <div style={headerStyle}>
+          <div>{rooms.find((r) => r.id === roomId)?.name || "Phòng chat"}</div>
+          <button onClick={() => setRoomId(null)} style={{ background: "none", color: "white", border: "none", cursor: "pointer" }}>Thoát</button>
+        </div>
+        <div style={messagesContainer}>
+          {messages.map((msg, index) => (
+            <div key={index} style={messageBubble(msg)}>
+              <div style={{ fontSize: 12, marginBottom: 5, color: "#555" }}>{msg.senderName}</div>
+              <div>{msg.text}</div>
+            </div>
+          ))}
+        </div>
+        <form style={inputBar} onSubmit={handleSendMessage}>
+          <input type="text" value={newMessage} onChange={(e) => setNewMessage(e.target.value)} placeholder="Nhập tin nhắn..." style={inputBox} />
+          <button type="submit" style={sendButton}>Gửi</button>
+        </form>
+      </div>
+    );
+  }
+
+  if (user && !roomId) {
+    return (
+      <div style={{ padding: 20 }}>
+        <h2>Xin chào, {user.displayName}</h2>
+        <img src={user.photoURL} alt="avatar" style={{ width: 50, height: 50, borderRadius: "50%" }} /><br />
+        <button onClick={() => signOut(auth)}>Đăng xuất</button>
+        <hr />
+        <h3>Tạo phòng mới</h3>
+        <form onSubmit={handleCreateRoom}>
+          <input type="text" placeholder="Tên phòng" value={roomName} onChange={(e) => setRoomName(e.target.value)} required />
+          <button type="submit">+ Tạo phòng</button>
+        </form>
+        <h3>Danh sách phòng</h3>
+        <ul>
+          {rooms.map((room) => (
+            <li key={room.id}>
+              <button onClick={() => setRoomId(room.id)}>{room.name}</button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  }
+
+  // Mặc định là giao diện đăng nhập (đã có sẵn bên trên)
   const loginStyle = {
     background: "#e2ebf0",
     height: "100vh",
@@ -159,35 +265,29 @@ export default function App() {
     marginTop: 10
   };
 
-  if (!user) {
-    return (
-      <div style={loginStyle}>
-        <div style={cardStyle}>
-          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_green.svg" alt="avatar" style={{ width: 64, marginBottom: 20 }} />
-          <h2 style={{ marginBottom: 20 }}>{isLogin ? "Đăng nhập" : "Đăng ký tài khoản"}</h2>
-          <form onSubmit={handleAuth}>
-            {!isLogin && (
-              <>
-                <input type="text" placeholder="Tên người dùng" value={username} onChange={(e) => setUsername(e.target.value)} required style={inputStyle} />
-                <input type="text" placeholder="Avatar URL" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} required style={inputStyle} />
-              </>
-            )}
-            <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
-            <input type="password" placeholder="Mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required style={inputStyle} />
-            <button type="submit" style={buttonStyle}>{isLogin ? "LOGIN" : "SIGN UP"}</button>
-          </form>
-          <p style={{ marginTop: 15 }}>
-            {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
-            <button onClick={() => setIsLogin(!isLogin)} style={{ marginLeft: 8, border: 0, background: "none", color: "#0077cc", cursor: "pointer" }}>
-              {isLogin ? "Đăng ký" : "Đăng nhập"}
-            </button>
-          </p>
-        </div>
+  return (
+    <div style={loginStyle}>
+      <div style={cardStyle}>
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_green.svg" alt="avatar" style={{ width: 64, marginBottom: 20 }} />
+        <h2 style={{ marginBottom: 20 }}>{isLogin ? "Đăng nhập" : "Đăng ký tài khoản"}</h2>
+        <form onSubmit={handleAuth}>
+          {!isLogin && (
+            <>
+              <input type="text" placeholder="Tên người dùng" value={username} onChange={(e) => setUsername(e.target.value)} required style={inputStyle} />
+              <input type="text" placeholder="Avatar URL" value={avatarUrl} onChange={(e) => setAvatarUrl(e.target.value)} required style={inputStyle} />
+            </>
+          )}
+          <input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} required style={inputStyle} />
+          <input type="password" placeholder="Mật khẩu" value={password} onChange={(e) => setPassword(e.target.value)} required style={inputStyle} />
+          <button type="submit" style={buttonStyle}>{isLogin ? "LOGIN" : "SIGN UP"}</button>
+        </form>
+        <p style={{ marginTop: 15 }}>
+          {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
+          <button onClick={() => setIsLogin(!isLogin)} style={{ marginLeft: 8, border: 0, background: "none", color: "#0077cc", cursor: "pointer" }}>
+            {isLogin ? "Đăng ký" : "Đăng nhập"}
+          </button>
+        </p>
       </div>
-    );
-  }
-
-  // Giữ nguyên phần chat bên dưới...
-
-  return <div>Giao diện chat sẽ hiển thị ở đây...</div>;
+    </div>
+  );
 }
