@@ -1,4 +1,4 @@
-// ✅ App.js - Bản gộp đầy đủ tất cả chức năng
+// ✅ App.js - Đã sửa dấu gạch ngang đúng trong authDomain
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -68,7 +68,7 @@ export default function App() {
   useEffect(() => {
     if (!roomId) return;
     const messagesRef = ref(database, `messages/${roomId}`);
-    setMessages([]); // reset messages khi chuyển phòng
+    setMessages([]);
     onChildAdded(messagesRef, (snapshot) => {
       setMessages((prev) => [...prev, snapshot.val()]);
     });
