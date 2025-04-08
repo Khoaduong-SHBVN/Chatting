@@ -1,4 +1,4 @@
-// ✅ App.js - Giao diện đăng nhập đẹp giống mẫu và icon táo xanh
+// ✅ App.js - Full code chuẩn với giao diện đẹp và firebase mới hoạt động
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -18,15 +18,14 @@ import {
   onChildAdded
 } from "firebase/database";
 
-// Firebase config
 const firebaseConfig = {
-  apiKey: "AIzaSyAuoBkh6ojEhanFX3Ko7MbfqYClRwvjvEtU",
-  authDomain: "chatting-08april25.firebaseapp.com",
-  projectId: "chatting-08april25",
-  storageBucket: "chatting-08april25.appspot.com",
-  messagingSenderId: "877320102519",
-  appId: "1:877320102519:web:4f0b402116fefd62b5c72",
-  measurementId: "G-2GLD29ST47"
+  apiKey: "AIzaSyCdniZSVpJm7F6d0YVoboV-PmLLGbPSbC4",
+  authDomain: "chatbox-2-7d4ce.firebaseapp.com",
+  projectId: "chatbox-2-7d4ce",
+  storageBucket: "chatbox-2-7d4ce.appspot.com",
+  messagingSenderId: "997567171125",
+  appId: "1:997567171125:web:29f89d2d3c1423eb19302c",
+  measurementId: "G-KTBTRWTYLY"
 };
 
 const app = initializeApp(firebaseConfig);
