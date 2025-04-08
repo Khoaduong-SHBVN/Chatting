@@ -1,4 +1,4 @@
-// ✅ App.js - Đã sửa dấu gạch ngang đúng trong authDomain
+// ✅ App.js - Giao diện đăng nhập đẹp giống mẫu và icon táo xanh
 import React, { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import {
@@ -125,51 +125,77 @@ export default function App() {
     setNewMessage("");
   };
 
+  const loginStyle = {
+    background: "linear-gradient(to right, #a8e063, #56ab2f)",
+    height: "100vh",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  };
+
+  const cardStyle = {
+    background: "rgba(255,255,255,0.9)",
+    padding: 30,
+    borderRadius: 10,
+    boxShadow: "0 10px 25px rgba(0,0,0,0.2)",
+    width: 320,
+    textAlign: "center"
+  };
+
   if (!user) {
     return (
-      <div style={{ padding: 20 }}>
-        <h2>{isLogin ? "Đăng nhập" : "Đăng ký tài khoản"}</h2>
-        <form onSubmit={handleAuth}>
-          {!isLogin && (
-            <>
-              <input
-                type="text"
-                placeholder="Tên người dùng"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              /><br />
-              <input
-                type="text"
-                placeholder="Avatar URL (link ảnh)"
-                value={avatarUrl}
-                onChange={(e) => setAvatarUrl(e.target.value)}
-                required
-              /><br />
-            </>
-          )}
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          /><br />
-          <input
-            type="password"
-            placeholder="Mật khẩu"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          /><br />
-          <button type="submit">{isLogin ? "Đăng nhập" : "Đăng ký"}</button>
-        </form>
-        <p>
-          {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
-          <button onClick={() => setIsLogin(!isLogin)}>
-            {isLogin ? "Đăng ký" : "Đăng nhập"}
-          </button>
-        </p>
+      <div style={loginStyle}>
+        <div style={cardStyle}>
+          <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_green.svg" alt="avatar" style={{ width: 80, marginBottom: 20 }} />
+          <h2 style={{ marginBottom: 20 }}>{isLogin ? "Đăng nhập" : "Đăng ký tài khoản"}</h2>
+          <form onSubmit={handleAuth}>
+            {!isLogin && (
+              <>
+                <input
+                  type="text"
+                  placeholder="Tên người dùng"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                  style={{ marginBottom: 10, width: "100%", padding: 10 }}
+                />
+                <input
+                  type="text"
+                  placeholder="Avatar URL (link ảnh)"
+                  value={avatarUrl}
+                  onChange={(e) => setAvatarUrl(e.target.value)}
+                  required
+                  style={{ marginBottom: 10, width: "100%", padding: 10 }}
+                />
+              </>
+            )}
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              style={{ marginBottom: 10, width: "100%", padding: 10 }}
+            />
+            <input
+              type="password"
+              placeholder="Mật khẩu"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              style={{ marginBottom: 10, width: "100%", padding: 10 }}
+            />
+            <button type="submit" style={{ background: "#333", color: "white", width: "100%", padding: 10, border: 0, cursor: "pointer" }}>
+              {isLogin ? "LOGIN" : "SIGN UP"}
+            </button>
+          </form>
+          <p style={{ marginTop: 10 }}>
+            {isLogin ? "Chưa có tài khoản?" : "Đã có tài khoản?"}
+            <button onClick={() => setIsLogin(!isLogin)} style={{ marginLeft: 10, border: "none", background: "transparent", color: "#333", cursor: "pointer" }}>
+              {isLogin ? "Đăng ký" : "Đăng nhập"}
+            </button>
+          </p>
+        </div>
       </div>
     );
   }
